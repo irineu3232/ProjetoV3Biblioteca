@@ -16,9 +16,9 @@ namespace ProjetoBiblioteca.Autenticacao
 
             var http = context.HttpContext;
 
-            var role = http.Session.GetString(SessionKeys.UserRole);
+            var role = http.Session.GetString(SessionKey.UserRole);
 
-            var userId = http.Session.GetInt32(SessionKeys.UserId);
+            var userId = http.Session.GetInt32(SessionKey.UserId);
 
             if (userId == null)
 
