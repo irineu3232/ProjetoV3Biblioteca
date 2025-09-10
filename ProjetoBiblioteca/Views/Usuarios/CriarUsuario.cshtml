@@ -2,7 +2,7 @@
 
 <h2>Cadastrar Usuário</h2>
 
-<form asp-action="Criar" method="post">
+<form asp-action="CriarUsuario" method="post">
     @Html.AntiForgeryToken()
     <section>
         <div>
@@ -29,5 +29,5 @@
             </select>
         </div>
     </section>
-    <button type="submit" asp-action="Index">Salvar</button>
+    <input type="submit" value="Salvar">
 </form>

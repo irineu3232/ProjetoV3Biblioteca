@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Autores>
+
+<link href="~/css/index.css" rel="stylesheet" />
+<h2>Autores</h2>
+
+
+
+
+<table class="tbl tbl-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Data de cadastro</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+        @foreach (var autores in Model)
+        {
+            <td>@autores.Id</td>
+            <td>@autores.Nome</td>
+            <td>@autores.Criado_Em</td>
+        }
+      </tr>
+    </tbody>
+</table>
+
+<a asp-action="Criar" class="btn">Cadastrar</a>
+<button class="btn">Editar</button>

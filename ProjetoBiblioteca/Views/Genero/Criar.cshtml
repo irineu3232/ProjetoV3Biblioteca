@@ -1,0 +1,14 @@
+﻿@model ProjetoBiblioteca.Models.Genero
+
+<h2>Cadastrar Genero</h2>
+
+<form asp-action="Criar" method="post">
+    @Html.AntiForgeryToken()
+    <section>
+        <div>
+            <label>Nome</label>
+            <input asp-for="Nome" required />
+        </div>
+    </section>
+    <input type="submit" value="Salvar"/>
+</form>

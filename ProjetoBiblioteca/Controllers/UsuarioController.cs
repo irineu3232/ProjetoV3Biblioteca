@@ -1,7 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto.Generators;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
+using BCrypt.Net;
+
+
+// Para instalar o BCrypt, vai para tools Nuget Package Manager, depois nuget package console
+// Depois insira no terminal Install-Package BCrypt.Net-Next para instalar o BCrypt para criptografar as senhas na hora de enviar ao banco de dados.
+
 
 namespace ProjetoBiblioteca.Controllers
 {
@@ -43,14 +50,18 @@ namespace ProjetoBiblioteca.Controllers
             using var conn = db.GetConnection();
 
             using var cmd = new MySqlCommand("sp_usuario_criar", conn);
+
+            var senhaHash = BCrypt.Net.BCrypt.HashPassword(vm.Senha, workFactor: 12);
+
+
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("p_nome", vm.Nome);
             cmd.Parameters.AddWithValue("p_email", vm.Email);
-            cmd.Parameters.AddWithValue("p_senha_hash", vm.Senha);
+            cmd.Parameters.AddWithValue("p_senha_hash", vm.Senha);      
             cmd.Parameters.AddWithValue("p_role", vm.Role);
             cmd.ExecuteNonQuery();
 
-            return RedirectToAction("CriarUsuario");
+            return RedirectToAction("Index");
         }
     }
 }

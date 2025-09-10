@@ -41,21 +41,22 @@ namespace ProjetoBiblioteca.Controllers
         public IActionResult Criar()
         {
             using var conn = db.GetConnection();
-            var vm = new LivroFormVM
-            {
-                Autores = CarregarAutores(conn),
-                Editoras = CarregarEditoras(conn),
-                CarregarGeneros = CarregarGeneros(conn)
-            };
-            return View(vm);
+
+
+            ViewBag.Autores = CarregarAutores(conn);
+            ViewBag.Editoras = CarregarEditoras(conn);
+            ViewBag.Generos = CarregarGeneros(conn);
+            
+            return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Criar(LivroFormVM vm)
+        public IActionResult Criar(Livros vm)
         {
             if(string.IsNullOrWhiteSpace(vm.Titulo) || vm.QuantidadeTotal < 1)
             {
                 ModelState.AddModelError("", "Informe titulo e uma quantidade total válida (>-1).");
+                
             }
             if (!ModelState.IsValid)
             {
@@ -66,6 +67,18 @@ namespace ProjetoBiblioteca.Controllers
                 return View(vm);
             }
             using var conn2 = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_livro_criar", conn2) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("p_titulo", vm.Titulo);
+            cmd.Parameters.AddWithValue("p_autor", (object?)vm.AutorId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_editora", (object?)vm.EditoraId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_genero", (object?)vm.GeneroId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_ano", (object?)vm.Ano ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_isbn", (object?)vm.Isbn ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_quantidade", (object ?)vm.QuantidadeTotal ?? DBNull.Value);
+            cmd.ExecuteNonQuery();
+
+            TempData["ok"] = "Livro cadastrado!";
+            return RedirectToAction(nameof(Index));
             // using var cmd = new MySqlCommand("sp_livro_criar", conn2)
         }
 
@@ -75,7 +88,8 @@ namespace ProjetoBiblioteca.Controllers
         private List<SelectListItem> CarregarAutores(MySqlConnection conn)
         {
             var list = new List<SelectListItem>();
-            using var cmd = new MySqlCommand("sp_autor_listar", conn) { CommandType = System.Data.CommandType.StoredProcedure };
+            using var cmd = new MySqlCommand("sp_autor_listar", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             using var rd = cmd.ExecuteReader();
             while (rd.Read())
                 list.Add(new SelectListItem { Value = rd.GetInt32("id").ToString(), Text = rd.GetString("nome") });

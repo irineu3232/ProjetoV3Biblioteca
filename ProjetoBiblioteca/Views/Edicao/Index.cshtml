@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Editoras>
+
+<link href="~/css/index.css" rel="stylesheet" />
+<h2>Editoras</h2>
+
+
+<table class="tbl tbl-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Data de cadastro</th>
+        </tr>
+     </thead>
+    <tbody>
+        <tr>
+        @foreach (var editoras in Model)
+        {
+            <td>@editoras.Id</td>
+            <td>@editoras.Nome</td>
+            <td>@editoras.Criado_Em</td>
+        }
+        </tr>
+    </tbody>
+</table>
+
+<a asp-action="Criar">Cadastrar</a>
+<button>Editar</button>

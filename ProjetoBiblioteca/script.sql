@@ -57,13 +57,23 @@ create table Livros(
     titulo varchar(200) not null,
     autorId int,
     editoraId int,
-    GeneroId int
+    generoId int,
     ano smallint,
     isbn varchar(32),
     quantidade_total int,
     quantidade_disponivel int,
     criado_em datetime not null default current_timestamp
-)
+);
+
+-- Criando as fks
+Alter Table Livros
+	add constraint fk_livros_autor
+		foreign key(autorId) references Autores(id),
+	add constraint fk_livros_editora
+		foreign key(editoraId) references Editoras(id),
+	add constraint fk_livros_genero
+		foreign key(GeneroId) references Generos(id);
+
 
 delimiter $$
 drop procedure if exists sp_editora_criar $$
@@ -93,21 +103,21 @@ delimiter $$
 drop procedure if exists sp_autor_listar $$
 create procedure sp_autor_listar()
 begin
-	select id, nome from Autor order by nome;
+	select id, nome from Autores order by nome;
 end; $$
 
 delimiter $$
 drop procedure if exists sp_editora_listar $$
 create procedure sp_editora_listar()
 begin
-	select id, nome from Editora order by nome;
+	select id, nome from Editoras order by nome;
 end; $$
 
 delimiter $$
 drop procedure if exists sp_genero_listar $$
 create procedure sp_genero_listar()
 begin
-	select id, nome from Genero order by nome;
+	select id, nome from Generos order by nome;
 end; $$
 
 delimiter $$
@@ -121,7 +131,7 @@ create procedure sp_livro_criar (
     in p_isbn varchar(32),
     in p_quantidade int)
 begin
-	insert into Livros(titulo, autor, editora, genero, ano, isbn, quantidade_total, quantidade_disponivel)
+	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, quantidade_total, quantidade_disponivel)
 				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_quantidade, p_quantidade);
 end; $$
 
@@ -132,20 +142,26 @@ begin
 	select
 		l.id,
         l.titulo,
-        l.autor,
+        l.autorId,
         a.nome as autor_nome,
-        l.editora,
+        l.editoraId,
         e.nome as editora_nome,
-        l.genero,
+        l.generoId,
         g.nome as genero_nome,
         l.ano,
         l.isbn,
         l.quantidade_total,
-        l.quanridade_disponivel,
+        l.quantidade_disponivel,
         l.criado_em
 	from livros l
-    left join autor   a on a.id = l.autor
-    left join editora e on e.id = l.editora
-    left join genero  g on g.id = l.genero
+    left join autores   a on a.id = l.autorId
+    left join editoras e on e.id = l.editoraId
+    left join generos  g on g.id = l.generoId
     order by l.titulo;
 end; $$
+
+
+select * from Usuarios;
+select * from Generos;
+Select * from Editoras;
+select * from Autores;
