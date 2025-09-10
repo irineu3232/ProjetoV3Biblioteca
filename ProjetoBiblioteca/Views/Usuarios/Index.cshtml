@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Usuarios>
+
+@{
+    var usuarios = ViewBag.Usuario;
+}
+
+<h2>Usuários</h2>
+
+<table>
+    <thead>
+        <tr>Nome</tr>
+        <tr>Email</tr>
+        <tr>Função</tr>
+        <tr>Ativo</tr> <!--Se o usuário está ativo ou não, podendo ser 0, caso não esteja ativo ou 1, caso esteja ativo (como em um bool)-->
+        <tr>Criado em</tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>@usuario.Nome</tr>
+            <tr>@usuario.Email</tr>
+            <tr>@usuario.Role</tr>
+            @if (usuario.Ativo == 1)
+            {
+                <tr>Sim</tr>
+            }
+            else
+            {
+                <tr>Não</tr>
+            }
+            <tr>@usuario.CriadoEm</tr>
+        }
+    </tbody>
+</table>
+<form action="Usuarios/CriarUsuario" method="post">
+    <button>Cadastrar</button>
+    <button>Editar</button>
+</form>

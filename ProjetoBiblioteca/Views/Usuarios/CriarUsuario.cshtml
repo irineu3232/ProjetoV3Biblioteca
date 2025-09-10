@@ -1,0 +1,33 @@
+﻿@model ProjetoBiblioteca.Models.Usuarios
+
+<h2>Cadastrar Usuário</h2>
+
+<form asp-action="Criar" method="post">
+    @Html.AntiForgeryToken()
+    <section>
+        <div>
+            <label>Nome</label>
+            <input asp-for="Nome" required />
+        </div>
+
+        <div>
+            <label>Email</label>
+            <input asp-for="Email" type="email" required />
+        </div>
+
+        <div>
+            <label>Senha (hash/temporária)</label>
+            <input asp-for="Senha" type="text" required />
+        </div>
+
+        <div>
+            <label>Papel</label>
+            <select name="Role" required>
+                <option value="">Selecione...</option>
+                <option value="Bibliotecario">Bibliotecário</option>
+                <option value="Admin">Admin</option>
+            </select>
+        </div>
+    </section>
+    <button type="submit" asp-action="Index">Salvar</button>
+</form>
