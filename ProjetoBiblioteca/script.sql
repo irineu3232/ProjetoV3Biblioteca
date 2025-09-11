@@ -132,7 +132,7 @@ create procedure sp_livro_criar (
     in p_quantidade int)
 begin
 	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, quantidade_total, quantidade_disponivel)
-				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_quantidade, p_quantidade);
+				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_isbn,p_quantidade, p_quantidade);
 end; $$
 
 delimiter $$
@@ -161,6 +161,59 @@ begin
 end; $$
 
 
+Delimiter $$
+drop procedure if exists sp_usuario_obter_por_email $$
+Create Procedure sp_usuario_obter_por_email(In p_email varchar(100))
+begin
+	select id, nome, email, senha_hash, role, ativo
+    from usuarios
+    where email = p_email
+    limit 1;
+end$$
+
+Delimiter ;
+
+
+
+
+Delimiter $$
+Drop Procedure if exists sp_livro_obter $$
+Create procedure sp_livro_obter (In p_id int)
+begin
+	select id, titulo, autorId, editoraId, generoId, ano, isbn
+			quantidade_total, quantidade_disponivel, criado_em
+    From Livros where id = p_id;
+End;
+
+drop procedure if exists sp_livro_atualizar $$
+create procedure sp_livro_atualizar(
+in p_id int, in p_titulo varchar(200), in p_autor int, in p_editora int,
+in p_genero int, in p_ano smallint, in p_isbn varchar(32), in p_novo_total int)
+begin
+	declare v_disp int; declare v_total int;
+    select quantidade_disponivel, quantidade total into v_disp, v_total
+    from Livros where id = p_id for Update;
+
+	Update Livros
+    set titulo = p_titulo, autorId = p_autor, editoraId = p_editora, genero = p_genero,
+		ano = p_ano, isbn = p_isbn,
+        quantidade_total = p_novo_total,
+        quantidade_disponivel = GREATEST(0, LEAST(p_novo_total, v_disp + (p_novo_total - v_total)))
+        where id = p_id;
+end;
+
+drop procedure if exists sp_livro_excluir $$
+create procedure sp_livro_excluir (in p_id int)
+begin
+	delete from Livros where id = p_id;
+end $$
+
+delimiter ;
+
+
+
+
+select * from Livros;
 select * from Usuarios;
 select * from Generos;
 Select * from Editoras;

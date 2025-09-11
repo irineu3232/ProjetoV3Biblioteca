@@ -2,7 +2,8 @@
 
 <link href="~/css/index.css" rel="stylesheet" />
 <h2>Editoras</h2>
-
+<button asp-action="Criar" class="btn">Cadastrar Editora</button>
+<br/>
 
 <table class="tbl tbl-table">
     <thead>
@@ -11,18 +12,41 @@
             <th>Nome</th>
             <th>Data de cadastro</th>
         </tr>
-     </thead>
+    </thead>
     <tbody>
-        <tr>
+        
         @foreach (var editoras in Model)
         {
-            <td>@editoras.Id</td>
-            <td>@editoras.Nome</td>
-            <td>@editoras.Criado_Em</td>
+            <tr>
+                <td>@editoras.Id</td>
+                <td>@editoras.Nome</td>
+                <td>@editoras.Criado_Em</td>
+                <td>
+                    <div class="acoes">
+
+                        <form asp-action="Editar" method="get">
+
+                            <input type="hidden" name="id" value="@editoras.Id" />
+
+                            <button type="submit" class="btn btn-editar">Editar</button>
+
+                        </form>
+
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+
+                                @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@editoras.Id" />
+
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+
+                        </form>
+                    </div>
+                </td>
+
+            </tr>
+            
         }
-        </tr>
     </tbody>
 </table>
 
-<a asp-action="Criar">Cadastrar</a>
-<button>Editar</button>

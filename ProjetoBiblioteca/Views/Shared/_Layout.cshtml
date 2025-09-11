@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using ProjetoBiblioteca.Autenticacao
+
+@{
+    var isLogged = Context.Session.GetInt32(SessionKey.UserId).HasValue;
+    var role = Context.Session.GetString(SessionKey.UserRole);
+    var userName = Context.Session.GetString(SessionKey.UserName);
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,36 +15,111 @@
     <title>@ViewData["Title"] - Biblioteca</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProjetoBiblioteca.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+    <style>
+
+        /* estilos básicos opcionais (caso não esteja usando site.css) */
+        body {
+        font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
+        margin: 0
+        }
+
+        .topnav {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 10px 16px;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        position: sticky;
+        top: 0
+        }
+
+        .topnav a {
+        text-decoration: none;
+        color: #111
+        }
+
+
+
+        .spacer {
+
+        flex: 1
+
+        }
+
+
+
+        .btn-link {
+
+        background: none;
+
+        border: 1px solid #2563eb;
+
+        color: #2563eb;
+
+        border-radius: 4px;
+
+        padding: 6px 10px;
+
+        cursor: pointer
+
+        }
+
+
+
+        .btn-link:hover {
+
+        background: #e6f0ff
+
+        }
+
+
+
+        .container {
+
+        padding: 20px
+
+        }
+
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjetoBiblioteca</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuários</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        @if(isLogged)
+        {
+         <nav class="topnav">
 
+                <a asp-controller="Home" asp-action="Index">Home</a>
+
+                <a asp-controller="Livro" asp-action="Index">Livros</a>
+
+                <a asp-controller="Autor" asp-action="Index">Autores</a>
+
+                <a asp-controller="Edicao" asp-action="Index">Editora</a>
+
+                <a asp-controller="Genero" asp-action="Index">Gêneros</a>
+
+            @*Somente para Admins verem o Usuários*@
+            @if(role == "Admin")
+            {
+                    <a asp-controller="Usuarios" asp-action="CriarUsuario"> Usuário</a>
+            }
+            <span class="spacer"></span>
+            <span>Olá, @userName</span>
+            <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-link">Sair</button>
+            </form>
+         </nav>
+        }
+    </header>
+        
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+  
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - ProjetoBiblioteca - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

@@ -2,7 +2,7 @@
 
 <link href="~/css/index.css" rel="stylesheet" />
 <h2>Autores</h2>
-
+<button asp-action="Criar" class="btn">Cadastrar Autor</button>
 
 
 
@@ -15,16 +15,39 @@
         </tr>
     </thead>
     <tbody>
-      <tr>
         @foreach (var autores in Model)
         {
-            <td>@autores.Id</td>
-            <td>@autores.Nome</td>
-            <td>@autores.Criado_Em</td>
+            <tr>
+                <td>@autores.Id</td>
+                <td>@autores.Nome</td>
+                <td>@autores.Criado_Em</td>
+                <td>
+
+                    <div class="acoes">
+
+                        <form asp-action="Editar" method="get">
+
+                            <input type="hidden" name="id" value="@autores.Id" />
+
+                            <button type="submit" class="btn btn-editar">Editar</button>
+
+                        </form>
+
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@autores.Id" />
+
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+
+                        </form>
+
+
+                    </div>
+
+                </td>
+            </tr>
         }
-      </tr>
     </tbody>
 </table>
-
-<a asp-action="Criar" class="btn">Cadastrar</a>
-<button class="btn">Editar</button>

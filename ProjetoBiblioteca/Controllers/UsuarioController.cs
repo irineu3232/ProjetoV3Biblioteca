@@ -57,7 +57,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("p_nome", vm.Nome);
             cmd.Parameters.AddWithValue("p_email", vm.Email);
-            cmd.Parameters.AddWithValue("p_senha_hash", vm.Senha);      
+            cmd.Parameters.AddWithValue("p_senha_hash", senhaHash);      
             cmd.Parameters.AddWithValue("p_role", vm.Role);
             cmd.ExecuteNonQuery();
 

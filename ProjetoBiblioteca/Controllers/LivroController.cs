@@ -8,6 +8,8 @@ namespace ProjetoBiblioteca.Controllers
 {
     public class LivroController : Controller
     {
+        private readonly Database db = new Database();
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -21,12 +23,12 @@ namespace ProjetoBiblioteca.Controllers
                 {
                     Id = rd.GetInt32("id"),
                     Titulo = rd.GetString("titulo"),
-                    AutorId = rd["autor"] == DBNull.Value ? null : (int?)rd.GetInt32("autor"),
-                    EditoraId = rd["editora"] == DBNull.Value ? null : (int?)rd.GetInt32("editora"),
-                    GeneroId = rd["genero"] == DBNull.Value ? null : (int?)rd.GetInt32("genero"),
-                    Autor = rd["autores"] as string,
-                    Editor = rd["editoras"] as string,
-                    Genero = rd["generos"] as string,
+                    AutorId = rd["autorId"] == DBNull.Value ? null : (int?)rd.GetInt32("autorId"),
+                    EditoraId = rd["editoraId"] == DBNull.Value ? null : (int?)rd.GetInt32("editoraId"),
+                    GeneroId = rd["generoId"] == DBNull.Value ? null : (int?)rd.GetInt32("generoId"),
+                    Autor = rd["autor_nome"] as string,
+                    Editor = rd["editora_nome"] as string,
+                    Genero = rd["genero_nome"] as string,
                     Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                     Isbn = rd["isbn"] as string,
                     QuantidadeTotal = rd.GetInt32("quantidade_total"),
@@ -82,8 +84,53 @@ namespace ProjetoBiblioteca.Controllers
             // using var cmd = new MySqlCommand("sp_livro_criar", conn2)
         }
 
-        private readonly Database db = new Database();
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            using var conn = db.GetConnection();
 
+            Livros? livro = null;
+            using (var cmd = new MySqlCommand("sp_livro_obter", conn) { CommandType = System.Data.CommandType.StoredProcedure})
+            {
+                cmd.Parameters.AddWithValue("p_id", id);
+                using var rd = cmd.ExecuteReader();
+                if(rd.Read())
+                {
+                    livro = new Livros
+                    {
+                        Id = rd.GetInt32("id"),
+                        Titulo = rd.GetString("titulo"),
+                        AutorId = rd["autorId"] == DBNull.Value ? null : (int?)rd.GetInt32("autorId"),
+                        EditoraId = rd["editoraId"] == DBNull.Value ? null : (int?)rd.GetInt32("editoraId"),
+                        GeneroId = rd["generoId"] == DBNull.Value ? null : (int?)rd.GetInt32("generoId"),
+                        Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
+                        Isbn = rd["isbn"] as string,
+                        QuantidadeTotal = rd.GetInt32("quantidade_total")
+
+                    };
+                }
+
+            }
+            if (livro == null) return NotFound();
+
+            ViewBag.Autores = CarregarAutores(conn);
+            ViewBag.Editoras = CarregarEditoras(conn);
+            ViewBag.Generos = CarregarGeneros(conn);
+
+            return View(livro);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Editar(Livros model)
+        {
+            if (model.Id <= 0) return NotFound();
+            if(string.IsNullOrWhiteSpace(model.Titulo) || model.QuantidadeTotal < 1)
+            {
+                ModelState.AddModelError("","Informe titulo e quantidade total (>=1).")
+            }
+        }
+
+  
         // Helpers para carregar os selects via SP (Stored Procedure)
         private List<SelectListItem> CarregarAutores(MySqlConnection conn)
         {

@@ -2,6 +2,8 @@
 using ProjetoBiblioteca.Data;
 using MySql.Data.MySqlClient;
 using ProjetoBiblioteca.Autenticacao;
+using System.Data;
+using BCrypt.Net;
 
 namespace ProjetoBiblioteca.Controllers
 {
@@ -40,7 +42,7 @@ namespace ProjetoBiblioteca.Controllers
                 var nome = rd.GetString("nome");
                 var role = rd.GetString("role");
                 var ativo = rd.GetBoolean("ativo");
-                var senhaHash = rd["senha_hash"] as string ?? "";
+                var senhaHash = rd["senha_hash"] as string;
 
                 if (!ativo)
                 {

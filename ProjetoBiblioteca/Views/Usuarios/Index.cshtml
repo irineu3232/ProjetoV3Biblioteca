@@ -8,7 +8,7 @@
 
 
 <style>
- .tbl {
+    .tbl {
         width: 100%;
         border-collapse: collapse;
         table-layout: auto;
@@ -16,26 +16,26 @@
 
 
 
-    .tbl th, .tbl td {
-       padding: 8px 12px;
-       border-bottom: 1px solid #e6e6e6;
-       vertical-align: middle;
-       text-align: left;
-       white-space: nowrap;
-    }
+        .tbl th, .tbl td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e6e6e6;
+            vertical-align: middle;
+            text-align: left;
+            white-space: nowrap;
+        }
 
 
 
-    .tbl thead th {
-       border-bottom: 2px solid #d0d0d0;
-       font-weight: 600;
-    }
+        .tbl thead th {
+            border-bottom: 2px solid #d0d0d0;
+            font-weight: 600;
+        }
 
 
 
-    .tbl tbody tr:nth-child(even) {
+        .tbl tbody tr:nth-child(even) {
             background: #fafafa;
-    }
+        }
 
 
 
@@ -62,9 +62,9 @@
 
 
 
-    .acoes form {
-        margin: 0;
-    }
+        .acoes form {
+            margin: 0;
+        }
 
 
 
@@ -80,9 +80,9 @@
 
 
 
-    .btn:hover {
-        background: #e9e9e9;
-    }
+        .btn:hover {
+            background: #e9e9e9;
+        }
 
 
 
@@ -92,9 +92,9 @@
 
 
 
-    .btn-editar:hover {
-        background: #e6f0ff;
-    }
+        .btn-editar:hover {
+            background: #e6f0ff;
+        }
 
 
 
@@ -113,34 +113,34 @@
 
 <table class="tbl tbl-table">
     <thead>
-     <tr>
-        <th>Nome</th>
-        <th>Email</th>
-        <th>Função</th>
-        <th>Ativo</th> <!--Se o usuário está ativo ou não, podendo ser 0, caso não esteja ativo ou 1, caso esteja ativo (como em um bool)-->
-        <th>Criado em</th>
-     </tr>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Função</th>
+            <th>Ativo</th> <!--Se o usuário está ativo ou não, podendo ser 0, caso não esteja ativo ou 1, caso esteja ativo (como em um bool)-->
+            <th>Criado em</th>
+        </tr>
     </thead>
     <tbody>
-       <tr>
-        @foreach (var usuario in Model)
-        {
-            <td>@usuario.Nome</td>
-            <td>@usuario.Email</td>
-            <td>@usuario.Role</td>
-            @if (usuario.Ativo == 1)
+        <tr>
+            @foreach (var usuario in Model)
             {
-                <td>Sim</td>
+                <td>@usuario.Nome</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.Role</td>
+                @if (usuario.Ativo == 1)
+                {
+                    <td>Sim</td>
+                }
+                else
+                {
+                    <td>Não</td>
+                }
+                <td>@usuario.CriadoEm</td>
             }
-            else
-            {
-                <td>Não</td>
-            }
-            <td>@usuario.CriadoEm</td>
-        }
         </tr>
     </tbody>
 </table>
 
-    <a asp-action="CriarUsuario" class="btn">Cadastrar</a>
-    <button>Editar</button>
+<a asp-action="CriarUsuario" class="btn">Cadastrar</a>
+<button>Editar</button>

@@ -2,7 +2,8 @@
 
 <link href="~/css/index.css" rel="stylesheet" />
 <h2>Genero</h2>
-
+<a asp-action="Criar" class="btn">Cadastrar um gênero</a>
+<br/>
 <table class="tbl tbl-table">
     <thead>
         <tr>
@@ -12,17 +13,42 @@
         </tr>
     </thead>
     <tbody>
-      <tr>
-
+     
         @foreach (var genero in Model)
         {
+          <tr>
             <td>@genero.Id</td>
             <td>@genero.Nome</td>
             <td>@genero.Criado_Em</td>
+               <td>
+                    <div class="acoes">
+
+                        <form asp-action="Editar" method="get">
+
+                            <input type="hidden" name="id" value="@genero.Id" />
+
+                            <button type="submit" class="btn btn-editar">Editar</button>
+
+                        </form>
+
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@genero.Id" />
+
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+
+                        </form>
+                    
+
+                    </div>
+               </td>
+         </tr>
         }
-      </tr>
+      
     </tbody>
 </table>
 
-<a asp-action="Criar" class="btn">Cadastrar</a>
-<button>Editar</button>
+
+
