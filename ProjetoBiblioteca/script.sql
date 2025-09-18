@@ -185,17 +185,18 @@ begin
     From Livros where id = p_id;
 End;
 
+Delimiter $$
 drop procedure if exists sp_livro_atualizar $$
 create procedure sp_livro_atualizar(
 in p_id int, in p_titulo varchar(200), in p_autor int, in p_editora int,
 in p_genero int, in p_ano smallint, in p_isbn varchar(32), in p_novo_total int)
 begin
 	declare v_disp int; declare v_total int;
-    select quantidade_disponivel, quantidade total into v_disp, v_total
+    select quantidade_disponivel, quantidade_total into v_disp, v_total
     from Livros where id = p_id for Update;
 
 	Update Livros
-    set titulo = p_titulo, autorId = p_autor, editoraId = p_editora, genero = p_genero,
+    set titulo = p_titulo, autorId = p_autor, editoraId = p_editora, generoId = p_genero,
 		ano = p_ano, isbn = p_isbn,
         quantidade_total = p_novo_total,
         quantidade_disponivel = GREATEST(0, LEAST(p_novo_total, v_disp + (p_novo_total - v_total)))

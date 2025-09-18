@@ -4,7 +4,7 @@ namespace ProjetoBiblioteca.Data
 {
     public class Database
     {
-        private readonly string connectionString = "server=localhost;port=3306;database=bdBiblioteca;user=root;password=@irineuJ32323;";
+        private readonly string connectionString = "server=localhost;port=3306;database=bdBiblioteca;user=root;password=12345678;";
 
         public MySqlConnection GetConnection()
         {

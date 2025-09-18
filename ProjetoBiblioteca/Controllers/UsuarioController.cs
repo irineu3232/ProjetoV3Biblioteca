@@ -4,6 +4,7 @@ using Org.BouncyCastle.Crypto.Generators;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
 using BCrypt.Net;
+using ProjetoBiblioteca.Autenticacao;
 
 
 // Para instalar o BCrypt, vai para tools Nuget Package Manager, depois nuget package console
@@ -12,6 +13,7 @@ using BCrypt.Net;
 
 namespace ProjetoBiblioteca.Controllers
 {
+    [SessionAuthorize(RoleAnyOf ="Admin")]
     public class UsuariosController : Controller
     {
         private readonly Database db = new Database();

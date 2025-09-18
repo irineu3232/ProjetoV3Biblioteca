@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using ProjetoBiblioteca.Autenticacao;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
 
 namespace ProjetoBiblioteca.Controllers
 {
+    [SessionAuthorize]
     public class GeneroController : Controller
     {
         private readonly Database db = new Database();
@@ -13,7 +15,7 @@ namespace ProjetoBiblioteca.Controllers
             List<Genero> genero = new List<Genero>();
             using (var conn = db.GetConnection())
             {
-                var sql = "select distinct id,nome,criado_em from Editoras order by nome";
+                var sql = "select distinct id,nome,criado_em from Generos order by nome";
                 var cmd = new MySqlCommand(sql, conn);
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())

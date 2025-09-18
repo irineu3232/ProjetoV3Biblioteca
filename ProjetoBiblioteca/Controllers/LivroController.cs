@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MySql.Data.MySqlClient;
+using ProjetoBiblioteca.Autenticacao;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
 using System.Data;
 
 namespace ProjetoBiblioteca.Controllers
 {
+    [SessionAuthorize]
     public class LivroController : Controller
     {
         private readonly Database db = new Database();
@@ -143,6 +145,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.ExecuteNonQuery();
 
             TempData["Ok"] = "Livro atualizada!";
+
             return RedirectToAction(nameof(Index));
         }
 

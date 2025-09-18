@@ -1,9 +1,15 @@
-﻿ @model ProjetoBiblioteca.Models.Livros;
+﻿@model ProjetoBiblioteca.Models.Livros;
 
 
 <form asp-action="Editar" method="post">
 
         <article>
+
+            <div>
+                <input type="hidden" asp-for="Id" />
+                <span asp-validation-for="Id"></span>
+            </div>
+
 
             <div>
                 <label>Titulo</label>
@@ -56,3 +62,4 @@
         </article>
 
 </form>
+

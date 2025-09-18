@@ -22,19 +22,15 @@ namespace ProjetoBiblioteca.Autenticacao
                 return;
             }
 
-
-
             if (!string.IsNullOrWhiteSpace(RoleAnyOf))
-
-
             {
                 var allowed = RoleAnyOf.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 if (!allowed.Contains(role))
 
                 {
-
-                    context.Result = new ForbidResult(); // ou RedirectToAction("AcessoNegado", "Auth") 
+                    // ForbidResult();
+                    context.Result = new RedirectToActionResult("AcessoNegado", "Auth", null); 
 
                     return;
 
