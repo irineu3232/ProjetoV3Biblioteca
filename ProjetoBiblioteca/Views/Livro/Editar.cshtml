@@ -1,0 +1,58 @@
+﻿ @model ProjetoBiblioteca.Models.Livros;
+
+
+<form asp-action="Editar" method="post">
+
+        <article>
+
+            <div>
+                <label>Titulo</label>
+                <input type="text" asp-for="Titulo" />
+            </div>
+
+
+            <div>
+                <label>Autor</label>
+                <select  asp-for="AutorId" asp-items="ViewBag.Autores">
+                    <option value="">Selecione o Autor</option>
+                </select>
+            </div>
+
+
+            <div>
+                <label>Genero</label>
+                <select asp-for="GeneroId" asp-items="ViewBag.Generos">
+
+                <option value="">Selecione o Genero</option>
+
+                </select>
+            </div>
+
+
+             <div>
+                <label>Editora</label>
+                <select asp-for="EditoraId"  asp-items="ViewBag.Editoras">
+                    <option value=""> Selecione a Editora</option>
+                </select>
+             </div>
+
+             <div>
+                 <label> Ano</label>
+                 <input type="text" asp-for="Ano" />
+             </div>
+
+             <div>
+                 <label> Isbn</label>
+                 <input type="text" asp-for="Isbn" />
+             </div>
+
+             <div>
+                 <label>Quantidade Total de livros</label>
+                <input type="number" asp-for="QuantidadeTotal"/>
+             </div>
+
+             <input type="submit" value="Alterar" />
+        
+        </article>
+
+</form>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MySql.Data.MySqlClient;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
+using System.Data;
 
 namespace ProjetoBiblioteca.Controllers
 {
@@ -126,8 +127,43 @@ namespace ProjetoBiblioteca.Controllers
             if (model.Id <= 0) return NotFound();
             if(string.IsNullOrWhiteSpace(model.Titulo) || model.QuantidadeTotal < 1)
             {
-                ModelState.AddModelError("","Informe titulo e quantidade total (>=1).")
+                ModelState.AddModelError("", "Informe titulo e quantidade total (>=1).");
             }
+
+            using var conn2 = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_livro_atualizar", conn2) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("p_id", model.Id);
+            cmd.Parameters.AddWithValue("P_titulo", model.Titulo);
+            cmd.Parameters.AddWithValue("p_autor", model.AutorId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("p_editora", model.GeneroId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("p_genero", model.GeneroId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("p_ano", model.Ano ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("p_isbn", (object)model.Isbn ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_novo_total", model.QuantidadeTotal);
+            cmd.ExecuteNonQuery();
+
+            TempData["Ok"] = "Livro atualizada!";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Excluir(int id)
+        {
+            using var conn = db.GetConnection();
+            try
+            {
+
+                using var cmd = new MySqlCommand("sp_livro_excluir", conn) { CommandType = CommandType.StoredProcedure };
+                cmd.Parameters.AddWithValue("p_id", id);
+                cmd.ExecuteNonQuery();
+                TempData["ok"] = "Livro excluido!";
+            }
+            catch (MySqlException ex)
+            {
+                // É a mensagem que vai dar erro, a caso já tenha algo ligada ao livro, que vai impossibilitar o delete, evitando que o sistema crashe
+                TempData["ok"] = ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
   

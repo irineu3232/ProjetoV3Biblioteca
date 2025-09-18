@@ -45,5 +45,35 @@ namespace ProjetoBiblioteca.Controllers
             cmd.ExecuteNonQuery();
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            using var conn = db.GetConnection();
+
+            using var cmd = new MySqlCommand("sp_select_editora", conn) ;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("id_edi", id);
+            cmd.ExecuteNonQuery();
+
+            return View(cmd);
+
+        }
+
+        [HttpPost]
+        public IActionResult Editar(int id, Editoras editoras)
+        {
+            using var conn = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_editar_editora", conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("id_edi", id);
+            cmd.Parameters.AddWithValue("nome_edi", editoras.Nome);
+            cmd.ExecuteNonQuery();
+
+            return View();
+        }
+
+
     }
 }

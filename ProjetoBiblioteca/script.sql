@@ -210,9 +210,37 @@ end $$
 
 delimiter ;
 
+-- Editora
+
+Drop procedure if exists sp_select_editora;
+Delimiter $$
+create procedure sp_select_editora(id_edi int)
+begin
+	select  nome from Editoras where id = id_edi;
+end $$
+
+Drop procedure if exists sp_editar_editora;
+Delimiter $$
+create procedure sp_editar_editora(id_edi int, nome_edi varchar(150))
+Begin
+
+	Update Editoras
+    set nome = nome_edi
+	where id = id_edi;
+    
+end $$
 
 
+Drop procedure if exists sp_deletar_editora;
+Delimiter $$
+create procedure sp_deletar_editora(id_edi int)
+begin
 
+	delete from Editoras where id = id_edi;
+
+end $$
+
+describe Editoras;
 select * from Livros;
 select * from Usuarios;
 select * from Generos;
