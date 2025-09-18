@@ -48,5 +48,62 @@ namespace ProjetoBiblioteca.Controllers
             cmd.ExecuteNonQuery();
             return RedirectToAction("Criar");
         }
-    }
+
+        [HttpGet]
+        public IActionResult Editar(int Id)
+        {
+            using var conn = db.GetConnection();
+
+            Genero? genero = null;
+            using (var cmd = new MySqlCommand("sp_select_genero", conn) { CommandType = System.Data.CommandType.StoredProcedure })
+            {
+                cmd.Parameters.AddWithValue("id_gen", Id);
+                using var rd = cmd.ExecuteReader();
+                if (rd.Read())
+                {
+                    genero = new Genero
+                    {
+                        Id = rd.GetInt32("id"),
+                        Nome = rd.GetString("nome"),
+                       
+                    };
+                }
+
+            }
+           
+
+            return View(genero);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Editar(Genero genero)
+        {
+            if (genero.Id <= 0) return NotFound();
+            
+            using var conn2 = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_editar_genero", conn2) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("id_gen", genero.Id);
+            cmd.Parameters.AddWithValue("nome_gen", genero.Nome);
+            cmd.ExecuteNonQuery();
+
+            TempData["Ok"] = "Livro atualizada!";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult Excluir(int Id)
+        {
+            using var conn = db.GetConnection();
+
+            using var cmd = new MySqlCommand("sp_deletar_genero", conn) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("id_gen", Id);
+            cmd.ExecuteNonQuery();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+    }      
+    
 }

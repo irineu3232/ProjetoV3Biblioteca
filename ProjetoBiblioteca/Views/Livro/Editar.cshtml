@@ -1,65 +1,74 @@
-﻿@model ProjetoBiblioteca.Models.Livros;
+﻿@model ProjetoBiblioteca.Models.Livros
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Editar Livro";
+}
 
+<div class="page-header">
+    <h2>Editar Livro</h2>
+</div>
 
-<form asp-action="Editar" method="post">
+<div class="card">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="validation">
+            @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@e.ErrorMessage</div>
+            }
+        </div>
+    }
 
-        <article>
+    <form asp-action="Editar" method="post" class="form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
 
-            <div>
-                <input type="hidden" asp-for="Id" />
-                <span asp-validation-for="Id"></span>
+        <div class="form-grid">
+            <div class="field">
+                <label>Título</label>
+                <input asp-for="Titulo" class="input" required />
             </div>
 
-
-            <div>
-                <label>Titulo</label>
-                <input type="text" asp-for="Titulo" />
-            </div>
-
-
-            <div>
+            <div class="field">
                 <label>Autor</label>
-                <select  asp-for="AutorId" asp-items="ViewBag.Autores">
-                    <option value="">Selecione o Autor</option>
+                <select asp-for="AutorId" asp-items="ViewBag.Autores" class="select">
+                    <option value="">(Selecione)</option>
                 </select>
             </div>
 
-
-            <div>
-                <label>Genero</label>
-                <select asp-for="GeneroId" asp-items="ViewBag.Generos">
-
-                <option value="">Selecione o Genero</option>
-
-                </select>
-            </div>
-
-
-             <div>
+            <div class="field">
                 <label>Editora</label>
-                <select asp-for="EditoraId"  asp-items="ViewBag.Editoras">
-                    <option value=""> Selecione a Editora</option>
+                <select asp-for="EditoraId" asp-items="ViewBag.Editoras" class="select">
+                    <option value="">(Selecione)</option>
                 </select>
-             </div>
+            </div>
 
-             <div>
-                 <label> Ano</label>
-                 <input type="text" asp-for="Ano" />
-             </div>
+            <div class="field">
+                <label>Gênero</label>
+                <select asp-for="GeneroId" asp-items="ViewBag.Generos" class="select">
+                    <option value="">(Selecione)</option>
+                </select>
+            </div>
 
-             <div>
-                 <label> Isbn</label>
-                 <input type="text" asp-for="Isbn" />
-             </div>
+            <div class="field">
+                <label>Ano</label>
+                <input asp-for="Ano" type="number" class="input" />
+            </div>
 
-             <div>
-                 <label>Quantidade Total de livros</label>
-                <input type="number" asp-for="QuantidadeTotal"/>
-             </div>
+            <div class="field">
+                <label>ISBN</label>
+                <input asp-for="Isbn" class="input" />
+            </div>
 
-             <input type="submit" value="Alterar" />
-        
-        </article>
+            <div class="field">
+                <label>Quantidade total</label>
+                <input asp-for="QuantidadeTotal" type="number" min="1" class="input" required />
+            </div>
+        </div>
 
-</form>
-
+        <div class="form-actions ">
+            <a asp-action="Index" class="btn btn-light">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>

@@ -1,1 +1,44 @@
-﻿
+﻿*
+{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.f{
+     text-align:center;
+     align-items:center;
+     border:2px solid rgb(15,15,15);
+     border-radius:15px;
+     
+}
+
+.l{
+    font-size:1.2rem;
+    font-style:italic;
+    font-family:'Sans Serif Collection';
+    font-weight: 400;
+    color:black;
+}
+
+.d{
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+        
+}
+
+.i {
+    font-size: 1.1rem;
+}
+
+.s{
+    font-size:1.1rem;
+
+}
+
+.i ,.s{
+    width:400px;
+    margin:0 auto;
+    border-radius:15px;
+}

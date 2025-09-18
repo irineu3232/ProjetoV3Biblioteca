@@ -8,25 +8,42 @@
 
 }
 
-<h2>Novo Livro</h2>
+<h2 class=" text-center;">Novo Livro</h2>
 
+<link href="~/css/acoes.css" rel="stylesheet" />
 
-
-<form asp-action="Criar" method="post">
+<form asp-action="Criar" method="post" class="f">
 
     @Html.AntiForgeryToken()
 
 
 
-    <div><label>Título</label><input asp-for="Titulo" required /></div>
+    <div class="d">
+        <label class="l">Título</label>
+        <input asp-for="Titulo" required  class="i"/>
+    </div>
 
 
 
-    <div>
+    <div class="d"> 
+        
+        <label class="l">Autor</label>
+        
+        <select asp-for="AutorId" asp-items="ViewBag.Autores" class="s">
+        
+            <option value="">(Selecione)</option>
+        
+        </select>
+        
+    </div>
+        
+        
+        
+    <div class="d">
 
-        <label>Autor</label>
+        <label class="l">Editora</label>
 
-        <select asp-for="AutorId" asp-items="ViewBag.Autores">
+        <select asp-for="EditoraId" asp-items="ViewBag.Editoras" class="s">
 
             <option value="">(Selecione)</option>
 
@@ -36,25 +53,11 @@
 
 
 
-    <div>
+    <div class="d">
 
-        <label>Editora</label>
+        <label class ="l">Gênero</label>
 
-        <select asp-for="EditoraId" asp-items="ViewBag.Editoras">
-
-            <option value="">(Selecione)</option>
-
-        </select>
-
-    </div>
-
-
-
-    <div>
-
-        <label>Gênero</label>
-
-        <select asp-for="GeneroId" asp-items="ViewBag.Generos">
+        <select asp-for="GeneroId" asp-items="ViewBag.Generos" class="s">
 
             <option value="">(Selecione)</option>
 
@@ -64,11 +67,20 @@
 
 
 
-    <div><label>Ano</label><input asp-for="Ano" type="number" /></div>
+    <div class="d">
+        <label class="l">Ano</label>
+        <input asp-for="Ano" type="number"  class="i"/>
+    </div>
 
-    <div><label>ISBN</label><input asp-for="Isbn" /></div>
+    <div class="d">
+        <label class ="l">ISBN</label>
+        <input asp-for="Isbn"  class="i"/>
+    </div>
 
-    <div><label>Quantidade total</label><input asp-for="QuantidadeTotal" type="number" min="1" value="1" required /></div>
+    <div class="d">
+        <label class ="l">Quantidade total</label>
+        <input asp-for="QuantidadeTotal" type="number" min="1" value="1" required  class="i"/>
+    </div>
 
 
 

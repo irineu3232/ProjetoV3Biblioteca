@@ -1,0 +1,39 @@
+﻿@model ProjetoBiblioteca.Models.Editoras
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Editar Editora";
+}
+
+<div class="page-header text-center">
+    <h2>Editar Editora</h2>
+</div>
+<link href="~/css/editar.css" rel="stylesheet" />
+<div class="card">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="validation">
+            @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@e.ErrorMessage</div>
+            }
+        </div>
+    }
+
+    <form asp-action="Editar" method="post" class="form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+
+        <div class="esp">
+            <div class="di dis">
+                <label class="lb">Nome</label>
+                <input asp-for="Nome" class="input" required />
+            </div>
+     
+      
+            <div class="di">
+                <a asp-action="Index" class="btn btn-primary inp">Cancelar</a>
+                <button type="submit" class="btn btn-primary inp">Salvar</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -49,32 +49,61 @@ namespace ProjetoBiblioteca.Controllers
         }
 
 
+
         [HttpGet]
-        public IActionResult Editar(int id)
+        public IActionResult Editar(int Id)
         {
             using var conn = db.GetConnection();
 
-            using var cmd = new MySqlCommand("sp_select_editora", conn) ;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("id_edi", id);
+            Editoras? editor = null;
+            using (var cmd = new MySqlCommand("sp_select_editora", conn) { CommandType = System.Data.CommandType.StoredProcedure })
+            {
+                cmd.Parameters.AddWithValue("id_edi", Id);
+                using var rd = cmd.ExecuteReader();
+                if (rd.Read())
+                {
+                    editor = new Editoras
+                    {
+                        Id = rd.GetInt32("id"),
+                        Nome = rd.GetString("nome"),
+
+                    };
+                }
+
+            }
+
+
+            return View(editor);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Editar(Editoras editor)
+        {
+            if (editor.Id <= 0) return NotFound();
+
+            using var conn2 = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_editar_editora", conn2) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("id_edi", editor.Id);
+            cmd.Parameters.AddWithValue("nome_edi", editor.Nome);
             cmd.ExecuteNonQuery();
 
-            return View(cmd);
+            TempData["Ok"] = "Livro atualizada!";
 
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Editar(int id, Editoras editoras)
+        public IActionResult Excluir(int Id)
         {
             using var conn = db.GetConnection();
-            using var cmd = new MySqlCommand("sp_editar_editora", conn);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("id_edi", id);
-            cmd.Parameters.AddWithValue("nome_edi", editoras.Nome);
+
+            using var cmd = new MySqlCommand("sp_deletar_editora", conn) { CommandType = System.Data.CommandType.StoredProcedure };
+            cmd.Parameters.AddWithValue("id_edi", Id);
             cmd.ExecuteNonQuery();
 
-            return View();
+            return RedirectToAction(nameof(Index));
         }
+
 
 
     }

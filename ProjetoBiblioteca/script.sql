@@ -214,11 +214,12 @@ delimiter ;
 
 -- Editora
 
-Drop procedure if exists sp_select_editora;
+
 Delimiter $$
+Drop procedure if exists sp_select_editora $$
 create procedure sp_select_editora(id_edi int)
 begin
-	select  nome from Editoras where id = id_edi;
+	select id, nome from Editoras where id = id_edi;
 end $$
 
 Drop procedure if exists sp_editar_editora;
@@ -232,14 +233,76 @@ Begin
     
 end $$
 
-Drop procedure if exists sp_deletar_editora;
 Delimiter $$
+Drop procedure if exists sp_deletar_editora $$
 create procedure sp_deletar_editora(id_edi int)
 begin
 
 	delete from Editoras where id = id_edi;
 
 end $$
+
+
+-- AUTOR -------------------------------
+
+
+Delimiter $$
+drop procedure if exists sp_select_autor $$
+create procedure sp_select_autor(id_aut int)
+begin
+	select id, nome from Autores where id = id_aut;
+end $$
+
+Delimiter $$
+Drop procedure if exists sp_editar_autor $$
+create procedure sp_editar_autor(id_aut int, nome_aut varchar(150))
+Begin
+
+	Update Autores
+    set nome = nome_aut
+	where id = id_aut;
+    
+end $$
+
+Delimiter $$
+Drop procedure if exists sp_deletar_autor $$
+create procedure sp_deletar_autor(id_aut int)
+begin
+
+	delete from Autores where id = id_aut;
+
+end $$
+
+-- Genero!!!!
+
+Delimiter $$
+drop procedure if exists sp_select_genero $$
+create procedure sp_select_genero(id_gen int)
+begin
+	select id, nome from Generos where id = id_gen;
+end $$
+
+Delimiter $$
+Drop procedure if exists sp_editar_genero $$
+create procedure sp_editar_genero(id_gen int, nome_gen varchar(150))
+Begin
+
+	Update Generos
+    set nome = nome_gen
+	where id = id_gen;
+    
+end $$
+
+Delimiter $$
+Drop procedure if exists sp_deletar_genero $$
+create procedure sp_deletar_genero(id_gen int)
+begin
+
+	delete from Generos where id = id_gen;
+
+end $$
+
+
 
 describe Editoras;
 select * from Livros;
