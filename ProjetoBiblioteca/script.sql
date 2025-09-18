@@ -180,7 +180,7 @@ Delimiter $$
 Drop Procedure if exists sp_livro_obter $$
 Create procedure sp_livro_obter (In p_id int)
 begin
-	select id, titulo, autorId, editoraId, generoId, ano, isbn
+	select id, titulo, autorId, editoraId, generoId, ano, isbn,
 			quantidade_total, quantidade_disponivel, criado_em
     From Livros where id = p_id;
 End;
@@ -202,7 +202,8 @@ begin
         where id = p_id;
 end;
 
-drop procedure if exists sp_livro_excluir $$
+drop procedure if exists sp_livro_excluir;
+Delimiter $$
 create procedure sp_livro_excluir (in p_id int)
 begin
 	delete from Livros where id = p_id;
@@ -229,7 +230,6 @@ Begin
 	where id = id_edi;
     
 end $$
-
 
 Drop procedure if exists sp_deletar_editora;
 Delimiter $$
