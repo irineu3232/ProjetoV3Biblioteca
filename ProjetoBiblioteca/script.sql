@@ -25,6 +25,8 @@ begin
     values (p_nome, p_email, p_senha_hash, p_role, 1, NOW());
 end $$
 
+select * from Livros;
+
 call sp_usuario_criar(
     'João Admin',
     'joao@biblioteca.com',

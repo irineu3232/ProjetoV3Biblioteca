@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\capas\" />
     <Folder Include="wwwroot\fotos\" />
   </ItemGroup>
 
