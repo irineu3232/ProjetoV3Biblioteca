@@ -13,7 +13,7 @@ using ProjetoBiblioteca.Autenticacao;
 
 namespace ProjetoBiblioteca.Controllers
 {
-    [SessionAuthorize(RoleAnyOf ="Admin")]
+    [SessionAuthorize(RoleAnyOf = "Admin")]
     public class UsuariosController : Controller
     {
         private readonly Database db = new Database();

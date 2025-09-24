@@ -18,6 +18,8 @@ namespace ProjetoBiblioteca.Models
         public string? Editor { get; set; }
         public string? Genero { get; set; }
 
+        public string? Capa { get; set; }
+
         // Para exibição (JOINs)
         public List<SelectListItem> Autores { get; set; } = new();
         public List<SelectListItem> Editoras { get; set; } = new();

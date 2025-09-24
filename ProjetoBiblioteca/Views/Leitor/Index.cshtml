@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjetoBiblioteca.Models.Livros>
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Leitor>
 
 @{
 
@@ -132,7 +132,7 @@
         }
 </style>
 
-   
+
 
 <table class="tbl tbl-livros">
 
@@ -140,27 +140,15 @@
 
         <tr>
 
-            <th>Capa</th>
+            <th>Foto</th>
 
+            
             <th>#</th>
 
-            <th>Título</th>
+            
+            <th>Nome</th>
 
-            <th>Autor</th>
 
-            <th>Editora</th>
-
-            <th>Gênero</th>
-
-            <th>Ano</th>
-
-            <th>ISBN</th>
-
-            <th>Total</th>
-
-            <th>Disp.</th>
-
-            <th class="col-acoes">Ações</th>
 
         </tr>
 
@@ -174,25 +162,11 @@
 
             <tr>
 
-                <td><img src="@l.Capa" /></td>
+                <td><img src="@l.foto" /></td>
 
-                <td>@l.Id</td>
+                <td>@l.id</td>
 
-                <td>@l.Titulo</td>
-
-                <td>@(l.Autor ?? "-")</td>
-
-                <td>@(l.Editor ?? "-")</td>
-
-                <td>@(l.Genero ?? "-")</td>
-
-                <td>@(l.Ano?.ToString() ?? "-")</td>
-
-                <td>@(string.IsNullOrWhiteSpace(l.Isbn) ? "-" : l.Isbn)</td>
-
-                <td>@l.QuantidadeTotal</td>
-
-                <td>@l.QuantidadeDisponivel</td>
+                <td>@l.nome</td>
 
                 <td>
 
@@ -200,7 +174,7 @@
 
                         <form asp-action="Editar" method="get">
 
-                            <input type="hidden" name="id" value="@l.Id" />
+                            <input type="hidden" name="id" value="@l.id" />
 
                             <button type="submit" class="btn btn-editar">Editar</button>
 
@@ -210,7 +184,7 @@
 
                             @Html.AntiForgeryToken()
 
-                            <input type="hidden" name="id" value="@l.Id" />
+                            <input type="hidden" name="id" value="@l.id" />
 
                             <button type="submit" class="btn btn-excluir">Excluir</button>
 

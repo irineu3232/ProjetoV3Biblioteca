@@ -64,7 +64,29 @@
                 <label>Quantidade total</label>
                 <input asp-for="QuantidadeTotal" type="number" min="1" class="input" required />
             </div>
+
+            <div class="field">
+                 <label>Capa atual</label>
+                <input type="image" asp-for="Capa" />
+            </div>
+
+              <div class="field">
+                    <label>
+                        Capa do livro
+                    </label>
+                    <input type="file" name="capa" accept="image/*" class="input" />
+                    <small class="hint"> Formatos comuns: JPG/PNG. Tamanho Moderado</small>
+              </div>
+
+       
+
+
         </div>
+
+
+     
+
+
 
         <div class="form-actions ">
             <a asp-action="Index" class="btn btn-light">Cancelar</a>

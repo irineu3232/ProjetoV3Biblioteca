@@ -74,6 +74,62 @@ Alter Table Livros
 	add constraint fk_livros_genero
 		foreign key(GeneroId) references Generos(id);
 
+-- Criando a coluna de capa imagens
+alter table Livros
+		Add column capa_arquivo varchar(255) null after isbn;
+
+
+create table leitor(
+id_leitor int primary key auto_increment,
+nomeLeitor varchar(30),
+foto_leitor varchar(255),
+criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+Create table emprestimos(
+id int primary key auto_increment,
+id_leitor int not null,
+id_bibliotecario int not null,
+data_emprestimo datetime not null Default CURRENT_TIMESTAMP,
+data_prevista_devolucao date not null,
+data_devolucao_geral DATETIME null,
+status enum ('Ativo','Finalizado','Parcial') not null default  'Ativo'
+);
+
+create table emprestimo_itens(
+id int primary key auto_increment,
+id_emprestimo int not null,
+id_livro int not null,
+quantidade int not null default 1,
+data_devolucao_item datetime null
+);
+
+
+alter table emprestimo_itens
+	add constraint fk_itens_emp foreign key(id_emprestimo) references emprestimos(id),
+    add constraint fk_itens_livro foreign key (id_livro) references Livros(id);
+
+alter table emprestimos
+    add constraint fk_emprestimos_usuario foreign key (id_bibliotecario) references Usuarios(id),
+	add constraint fk_leitor_emp foreign key(id_leitor) references leitor(id_leitor);
+
+delimiter $$
+drop procedure if exists sp_leitor_criar $$
+create procedure sp_leitor_criar(p_nome varchar(30), p_foto varchar(255))
+begin
+			insert into leitor(nomeLeitor,foto_leitor, criado_em)
+						values(p_nome,p_foto, now());
+end $$
+
+
+delimiter $$
+drop procedure if exists sp_leitor_listar $$
+create procedure sp_leitor_listar()
+begin
+
+end $$
 
 delimiter $$
 drop procedure if exists sp_editora_criar $$
@@ -129,10 +185,11 @@ create procedure sp_livro_criar (
     in p_genero int,
     in p_ano smallint,
     in p_isbn varchar(32),
-    in p_quantidade int)
+    in p_quantidade int,
+    in p_capa_arquivo varchar(255))
 begin
-	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, quantidade_total, quantidade_disponivel)
-				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_isbn,p_quantidade, p_quantidade);
+	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, quantidade_total, quantidade_disponivel,capa_arquivo)
+				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_isbn,p_quantidade, p_quantidade, p_capa_arquivo);
 end; $$
 
 delimiter $$
@@ -152,6 +209,7 @@ begin
         l.isbn,
         l.quantidade_total,
         l.quantidade_disponivel,
+        l.capa_arquivo,
         l.criado_em
 	from livros l
     left join autores   a on a.id = l.autorId
@@ -301,6 +359,10 @@ begin
 	delete from Generos where id = id_gen;
 
 end $$
+
+
+
+
 
 
 

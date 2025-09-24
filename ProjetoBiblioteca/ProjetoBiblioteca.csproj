@@ -11,4 +11,9 @@
     <PackageReference Include="MySql.Data" Version="9.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\capas\" />
+    <Folder Include="wwwroot\fotos\" />
+  </ItemGroup>
+
 </Project>

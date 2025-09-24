@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MySql.Data.MySqlClient;
 using ProjetoBiblioteca.Autenticacao;
@@ -34,6 +35,7 @@ namespace ProjetoBiblioteca.Controllers
                     Genero = rd["genero_nome"] as string,
                     Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                     Isbn = rd["isbn"] as string,
+                    Capa= rd["capa_arquivo"] == DBNull.Value ? null : (string?)rd.GetString("capa_arquivo"),
                     QuantidadeTotal = rd.GetInt32("quantidade_total"),
                     QuantidadeDisponivel = rd.GetInt32("quantidade_disponivel"),
                     CriadoEm = rd.GetDateTime("criado_em")
@@ -56,8 +58,25 @@ namespace ProjetoBiblioteca.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Criar(Livros vm)
+        public IActionResult Criar(Livros vm, IFormFile? capa)
         {
+            string? relPath = null;
+
+            if (capa != null && capa.Length > 0)
+            {
+                var ext = Path.GetExtension(capa.FileName);
+                //(opicional) validar extensão
+
+                var fileName = $"{Guid.NewGuid()}{ext}";
+                var savedir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "capas");
+                Directory.CreateDirectory(savedir);
+                var absPath = Path.Combine(savedir, fileName);
+                using var fs = new FileStream(absPath, FileMode.Create);
+                capa.CopyTo(fs);
+                relPath = Path.Combine("capas", fileName).Replace("\\", "/");
+            }
+
+
             if(string.IsNullOrWhiteSpace(vm.Titulo) || vm.QuantidadeTotal < 1)
             {
                 ModelState.AddModelError("", "Informe titulo e uma quantidade total válida (>-1).");
@@ -80,6 +99,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.Parameters.AddWithValue("p_ano", (object?)vm.Ano ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_isbn", (object?)vm.Isbn ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_quantidade", (object ?)vm.QuantidadeTotal ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_capa_arquivo", (object?)relPath ?? DBNull.Value);
             cmd.ExecuteNonQuery();
 
             TempData["ok"] = "Livro cadastrado!";
@@ -108,7 +128,8 @@ namespace ProjetoBiblioteca.Controllers
                         GeneroId = rd["generoId"] == DBNull.Value ? null : (int?)rd.GetInt32("generoId"),
                         Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                         Isbn = rd["isbn"] as string,
-                        QuantidadeTotal = rd.GetInt32("quantidade_total")
+                        QuantidadeTotal = rd.GetInt32("quantidade_total"),
+                        Capa = rd.GetString("capa_arquivo")
 
                     };
                 }
@@ -124,8 +145,25 @@ namespace ProjetoBiblioteca.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Editar(Livros model)
+        public IActionResult Editar(Livros model, IFormFile capa)
         {
+            string? relPath = null;
+
+            if (capa != null && capa.Length > 0)
+            {
+                var ext = Path.GetExtension(capa.FileName);
+                //(opicional) validar extensão
+
+                var fileName = $"{Guid.NewGuid()}{ext}";
+                var savedir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "capas");
+                Directory.CreateDirectory(savedir);
+                var absPath = Path.Combine(savedir, fileName);
+                using var fs = new FileStream(absPath, FileMode.Create);
+                capa.CopyTo(fs);
+                relPath = Path.Combine("capas", fileName).Replace("\\", "/");
+            }
+
+
             if (model.Id <= 0) return NotFound();
             if(string.IsNullOrWhiteSpace(model.Titulo) || model.QuantidadeTotal < 1)
             {
@@ -142,6 +180,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.Parameters.AddWithValue("p_ano", model.Ano ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("p_isbn", (object)model.Isbn ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_novo_total", model.QuantidadeTotal);
+            cmd.Parameters.AddWithValue("p_capa_arquivo",(object?) relPath ?? DBNull.Value);
             cmd.ExecuteNonQuery();
 
             TempData["Ok"] = "Livro atualizada!";
