@@ -100,10 +100,13 @@
 
                 <a asp-controller="Genero" asp-action="Index">Gêneros</a>
 
+                
+
             @*Somente para Admins verem o Usuários*@
             @if(role == "Admin")
             {
                     <a asp-controller="Usuarios" asp-action="CriarUsuario"> Usuário</a>
+                    <a asp-controller="Leitor" asp-action="Index">Leitor</a>
             }
             <span class="spacer"></span>
             <span>Olá, @userName</span>

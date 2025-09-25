@@ -1,0 +1,53 @@
+﻿@model ProjetoBiblioteca.Models.Leitor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Editar Livro";
+}
+<link href="~/css/acoes.css" rel="stylesheet" />
+<div class="page-header">
+    <h2>Editar Livro</h2>
+</div>
+
+<div class="card">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="validation">
+            @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@e.ErrorMessage</div>
+            }
+        </div>
+    }
+
+    <form asp-action="Editar" method="post" class="f" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="id"/>
+
+        <div class="d">
+            <div class="d">
+                <label class="l">Nome</label>
+                <input asp-for="nome" class="i" required />
+            </div>
+
+            
+            <div class="d">
+                <label class="l lif">
+                    Insira a foto do leitor
+                    <input type="file" name="foto" accept="image/*" class="i" style="display:none" />
+                </label>
+
+                <small class="hint"> Formatos comuns: JPG/PNG. Tamanho Moderado</small>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div class="form-actions ">
+            <a asp-action="Index" class="btn btn-light">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>

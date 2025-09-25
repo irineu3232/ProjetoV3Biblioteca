@@ -12,7 +12,7 @@
 
 <link href="~/css/acoes.css" rel="stylesheet" />
 
-<form asp-action="Criar" method="post" class="f">
+<form asp-action="Criar" method="post" class="f" enctype="multipart/form-data">
 
     @Html.AntiForgeryToken()
 
@@ -25,11 +25,12 @@
 
 
 
-    <div class="field">
-        <label>
+    <div class="d">
+        <label class="l lif">
            Insira sua foto
+            <input type="file" name="foto" accept="image/*" class="i" style="display:none" />
         </label>
-        <input type="file" name="foto" accept="image/*" class="input" />
+        
         <small class="hint"> Formatos comuns: JPG/PNG. Tamanho Moderado</small>
     </div>
 

@@ -129,7 +129,7 @@ namespace ProjetoBiblioteca.Controllers
                         Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                         Isbn = rd["isbn"] as string,
                         QuantidadeTotal = rd.GetInt32("quantidade_total"),
-                        Capa = rd.GetString("capa_arquivo")
+                        Capa = rd["capa_arquivo"] == DBNull.Value ? null : (string?)rd.GetString("capa_arquivo")
 
                     };
                 }

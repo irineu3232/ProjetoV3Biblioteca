@@ -4,10 +4,10 @@
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    ViewData["Title"] = "Livros";
+    ViewData["Title"] = "Leitor";
 
 }
-
+<link href="~/css/acoes.css" rel="stylesheet" />
 
 
 <h2>Livros</h2>
@@ -24,7 +24,7 @@
 
 
 
-<p><a asp-action="Criar" class="btn">Novo Livro</a></p>
+<p><a asp-action="Criar" class="btn">Novo Leitor</a></p>
 
 
 
@@ -58,6 +58,7 @@
 
         .tbl tbody tr:nth-child(even) {
             background: #fafafa;
+            text-align:center;
         }
 
 
@@ -81,6 +82,7 @@
         gap: 8px;
         align-items: center;
         justify-content: center;
+        margin-right: 0px;
     }
 
 
@@ -130,6 +132,12 @@
         .btn-excluir:hover {
             background: #ffeaea;
         }
+
+    .imagem {
+        width: 90px;
+        height: 90px;
+    }
+
 </style>
 
 
@@ -148,8 +156,7 @@
             
             <th>Nome</th>
 
-
-
+            <th>Ações</th>
         </tr>
 
     </thead>
@@ -162,7 +169,7 @@
 
             <tr>
 
-                <td><img src="@l.foto" /></td>
+                <td><img src="@l.foto" class="imagem" /></td>
 
                 <td>@l.id</td>
 
@@ -174,17 +181,17 @@
 
                         <form asp-action="Editar" method="get">
 
-                            <input type="hidden" name="id" value="@l.id" />
+                            <input type="hidden" name="id" value="@l.id" class="i" />
 
-                            <button type="submit" class="btn btn-editar">Editar</button>
+                            <button type="submit" class="btn btn-editar align-content-center">Editar</button>
 
                         </form>
 
-                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+                        <form   asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
 
                             @Html.AntiForgeryToken()
 
-                            <input type="hidden" name="id" value="@l.id" />
+                            <input type="hidden" name="id" value="@l.id " />
 
                             <button type="submit" class="btn btn-excluir">Excluir</button>
 

@@ -117,6 +117,20 @@ alter table emprestimos
     add constraint fk_emprestimos_usuario foreign key (id_bibliotecario) references Usuarios(id),
 	add constraint fk_leitor_emp foreign key(id_leitor) references leitor(id_leitor);
 
+
+
+
+
+
+delimiter $$
+drop procedure if exists sp_leitor_listar $$
+create procedure sp_leitor_listar()
+begin
+	select id_leitor, nomeLeitor, foto_leitor
+    from Leitor;
+    
+end $$
+
 delimiter $$
 drop procedure if exists sp_leitor_criar $$
 create procedure sp_leitor_criar(p_nome varchar(30), p_foto varchar(255))
@@ -127,9 +141,24 @@ end $$
 
 
 delimiter $$
-drop procedure if exists sp_leitor_listar $$
-create procedure sp_leitor_listar()
+drop procedure if exists sp_leitor_obter $$
+create procedure sp_leitor_obter(l_id int)
 begin
+	select id_leitor, nomeLeitor, foto_leitor
+    from Leitor
+    where id_leitor = l_id;
+end $$
+
+Delimiter $$
+drop procedure if exists sp_leitor_editar$$
+create procedure sp_leitor_editar(l_id int, l_nome varchar(30), l_foto varchar(255))
+begin
+
+	Update Leitor
+    set nomeLeitor = l_nome, foto_leitor = l_foto
+    where id_leitor = l_id;
+
+
 
 end $$
 
@@ -241,7 +270,7 @@ Drop Procedure if exists sp_livro_obter $$
 Create procedure sp_livro_obter (In p_id int)
 begin
 	select id, titulo, autorId, editoraId, generoId, ano, isbn,
-			quantidade_total, quantidade_disponivel, criado_em
+			quantidade_total, quantidade_disponivel, criado_em, capa_arquivo
     From Livros where id = p_id;
 End;
 

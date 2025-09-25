@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Editar Livro";
 }
-
+<link href="~/css/acoes.css" rel="stylesheet" />
 <div class="page-header">
     <h2>Editar Livro</h2>
 </div>
@@ -19,62 +19,58 @@
         </div>
     }
 
-    <form asp-action="Editar" method="post" class="form">
+    <form asp-action="Editar" method="post" class="f" enctype="multipart/form-data" >
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
 
-        <div class="form-grid">
-            <div class="field">
-                <label>Título</label>
-                <input asp-for="Titulo" class="input" required />
+        <div class="d">
+            <div class="d">
+                <label class="l">Título</label>
+                <input asp-for="Titulo" class="i" required />
             </div>
 
-            <div class="field">
-                <label>Autor</label>
-                <select asp-for="AutorId" asp-items="ViewBag.Autores" class="select">
+            <div class="d">
+                <label class="l">Autor</label>
+                <select asp-for="AutorId" asp-items="ViewBag.Autores" class="s">
                     <option value="">(Selecione)</option>
                 </select>
             </div>
 
-            <div class="field">
-                <label>Editora</label>
-                <select asp-for="EditoraId" asp-items="ViewBag.Editoras" class="select">
+            <div class="d">
+                <label class="l">Editora</label>
+                <select asp-for="EditoraId" asp-items="ViewBag.Editoras" class="i">
                     <option value="">(Selecione)</option>
                 </select>
             </div>
 
-            <div class="field">
-                <label>Gênero</label>
-                <select asp-for="GeneroId" asp-items="ViewBag.Generos" class="select">
+            <div class="d">
+                <label class="l">Gênero</label>
+                <select asp-for="GeneroId" asp-items="ViewBag.Generos" class="s">
                     <option value="">(Selecione)</option>
                 </select>
             </div>
 
-            <div class="field">
-                <label>Ano</label>
-                <input asp-for="Ano" type="number" class="input" />
+            <div class="d">
+                <label class="l">Ano</label>
+                <input class="i" asp-for="Ano" type="number" class="input" />
             </div>
 
-            <div class="field">
-                <label>ISBN</label>
-                <input asp-for="Isbn" class="input" />
+            <div class="d">
+                <label class="l">ISBN</label>
+                <input class="i" asp-for="Isbn" class="input" />
             </div>
 
-            <div class="field">
-                <label>Quantidade total</label>
-                <input asp-for="QuantidadeTotal" type="number" min="1" class="input" required />
+            <div class="d">
+                <label class="l">Quantidade total</label>
+                <input class="i" asp-for="QuantidadeTotal" type="number" min="1" class="input" required />
             </div>
 
-            <div class="field">
-                 <label>Capa atual</label>
-                <input type="image" asp-for="Capa" />
-            </div>
-
-              <div class="field">
-                    <label>
+              <div class="d">
+                    <label class="l lif">
                         Capa do livro
+                         <input type="file" name="capa" accept="image/*" class="i" style="display:none" />
                     </label>
-                    <input type="file" name="capa" accept="image/*" class="input" />
+                    
                     <small class="hint"> Formatos comuns: JPG/PNG. Tamanho Moderado</small>
               </div>
 
@@ -82,10 +78,6 @@
 
 
         </div>
-
-
-     
-
 
 
         <div class="form-actions ">
