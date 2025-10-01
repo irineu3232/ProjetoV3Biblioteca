@@ -9,7 +9,7 @@
 
 <!-- Formulário de busca -->
 <form method="get" asp-action="Vitrine" style="margin-bottom:10px">
-    <input list="livros" name="q" value="@ViewBag.q" placeholder="Buscar por título..." style="width:300px" />
+    <input list="livros" name="q" value="@ViewBag.q" placeholder="Buscar por título..." style="width:300px" /> @*onchange="this.form.submit(), Ele pode alterar instantaneamente*@
     <datalist id="livros">
         @if (ViewBag.Titulos is IEnumerable<string> ts)
         {
@@ -20,7 +20,7 @@
         }
     </datalist>
     <button type="submit">Buscar</button>
-    <a asp-action="Carrinho" style="margin-left:10px">Ver carrinho</a>
+    <a asp-action="Carrinho" style="margin-left:10px;" class=" btn btn-primary">Ver carrinho</a>
 </form>
 
 @if (TempData["ok"] != null)
