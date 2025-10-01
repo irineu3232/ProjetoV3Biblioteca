@@ -392,7 +392,20 @@ begin
 end $$
 
 
+Delimiter $$
+Drop procedure if exists sp_vitrine_buscar $$
+create procedure sp_vitrine_buscar(In p_q varchar(200))
+begin
+	Select 
+    l.id, l.titulo, l.autorId, l.editoraId, l.generoId, l.ano, l.isbn, l.capa_arquivo, 
+    l.quantidade_total, l.quantidade_disponivel
+    from Livros l 
+    where l.quantidade_disponivel > 0
+		and (p_q is null or p_q = '' or l.titulo like concat('%', p_q, '%'))
+	Order by l.titulo;
+end $$
 
+describe Livros;
 
 
 
