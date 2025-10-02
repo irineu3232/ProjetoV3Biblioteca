@@ -405,6 +405,92 @@ begin
 	Order by l.titulo;
 end $$
 
+
+Delimiter $$
+drop procedure if exists sp_livro_listar_por_ids $$
+create procedure sp_livro_listar_por_ids(in p_ids TEXT)
+begin
+	/* p_ids : string CSV, ex.: '1,5,9'*/
+	
+	select l.id, l.titulo, l.capa_arquivo, l.quantidade_disponivel
+    from Livros l
+    where FIND_IN_SET(l.id, p_ids) > 0
+    order by l.titulo;
+
+end $$
+
+
+Delimiter $$
+drop procedure if exists sp_listar_leitor_list $$
+create procedure sp_listar_leitor_list()
+begin	
+	select id_leitor, nomeLeitor
+    from Livros l
+    order by nomeLeitor;
+end $$
+
+
+Delimiter $$
+drop procedure if exists sp_emprestimo_adicionar_item $$
+create procedure sp_emprestimo_adicionar_item (
+in p_id_emprestimo int,
+in p_id_livro int,
+in p_qtd int
+)
+begin
+declare v_disp int;
+
+if p_qtd is null or p_qtd <= 0 then
+		signal SQLSTATE '45000' SET MESSAGE_TEXT = 'Quantidade inválida';
+end if;
+
+select quantidade_disponivel into v_disp from Livros where id = p_id_livro for Update;
+
+if v_disp is null then
+	signal SQLSTATE '45000' SET MESSAGE_TEXT = 'Livro inexistente';
+end if;
+
+if v_disp < p_qtd then
+	signal SQLSTATE '45000' SET MESSAGE_TEXT = 'Estoque insuficiente para este livro';
+end if;
+
+	insert into emprestimo_itens(id_emprestimo, id_livro, quantidade)
+						values(p_id_emprestimo, p_id_livro, p_qtd);
+	
+    update Livros
+		set  quantidade_disponivel = quantidade_disponivel - p_qtd
+        where id = p_id_livro;
+
+end $$
+
+describe Livros;
+
+Delimiter $$
+drop procedure if exists sp_emprestimo_criar $$
+create procedure sp_emprestimo_criar (
+in p_id_leitor int,
+in p_id_bibliotecario int,
+in p_data_prevista DATE,
+out p_id_gerado int
+)
+begin
+
+	Insert into emprestimos(id_leitor, id_bibliotecario, data_prevista_devolucao)
+					values(p_id_leitor, p_id_bibliotecario, p_data_prevista);
+                    set p_id_gerado = Last_Insert_Id();
+
+end $$
+
+
+
+
+describe emprestimos;
+describe leitor;
+
+
+
+
+
 describe Livros;
 
 
